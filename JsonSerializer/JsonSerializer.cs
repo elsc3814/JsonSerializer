@@ -1,4 +1,6 @@
-﻿using System.Text;
+﻿using System;
+using System.Globalization;
+using System.Text;
 
 namespace JsonSerializer
 {
@@ -21,10 +23,11 @@ namespace JsonSerializer
                         sb.Append($"\"{name}\":\"{value}\"");
                         break;
                     default:
-                        sb.Append($"\"{name}\":{value}");
+                        sb.Append($"\"{name}\":{Convert.ToString(value, CultureInfo.InvariantCulture)}");
                         break;
                 }
             }
+
             sb.Append("}");
             return sb.ToString();
         }
