@@ -22,6 +22,9 @@ namespace JsonSerializer
                     case "String":
                         sb.Append($"\"{name}\":\"{value}\"");
                         break;
+                    case "Boolean":
+                        sb.Append($"\"{name}\":{(value != null && (bool) value ? "true" : "false")}");
+                        break;
                     default:
                         sb.Append($"\"{name}\":{Convert.ToString(value, CultureInfo.InvariantCulture)}");
                         break;

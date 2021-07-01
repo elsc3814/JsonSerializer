@@ -52,5 +52,19 @@ namespace NUnitTestJsonSerializer
             var result = _sut.Serialize(new {Price = (decimal) 22.666});
             Assert.AreEqual("{\"Price\":22.666}", result);
         }
+
+        [Test]
+        public void CorrectlySerializeTrue()
+        {
+            var result = _sut.Serialize(new {IsNew = true});
+            Assert.AreEqual("{\"IsNew\":true}", result);
+        }
+
+        [Test]
+        public void CorrectlySerializeFalse()
+        {
+            var result = _sut.Serialize(new {IsNew = false});
+            Assert.AreEqual("{\"IsNew\":false}", result);
+        }
     }
 }
