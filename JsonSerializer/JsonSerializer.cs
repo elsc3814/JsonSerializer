@@ -10,6 +10,12 @@ namespace JsonSerializer
         public string Serialize(object o)
         {
             var sb = new StringBuilder();
+            SerializeObject(o, sb);
+            return sb.ToString();
+        }
+
+        private static void SerializeObject(object o, StringBuilder sb)
+        {
             sb.Append("{");
             var properties = o.GetType().GetProperties();
 
@@ -24,7 +30,6 @@ namespace JsonSerializer
             }
 
             sb.Append("}");
-            return sb.ToString();
         }
 
         private static void AppendValue(object value, Type type, StringBuilder sb)
@@ -42,6 +47,12 @@ namespace JsonSerializer
                 }
 
                 sb.Append("]");
+                return;
+            }
+
+            if (type.IsClass && type.Name != "String")
+            {
+                SerializeObject(value, sb);
                 return;
             }
 

@@ -100,5 +100,40 @@ namespace NUnitTestJsonSerializer
                 });
             Assert.AreEqual("{\"string\":[\"just\",\"string\"],\"bool\":[false,true],\"float\":[1.2,1.4]}", result);
         }
+
+        [Test]
+        public void CorrectlySerializeObject()
+        {
+            var result = _sut.Serialize(
+                new
+                {
+                    object1 = new
+                    {
+                        name = "Name",
+                        value = 4
+                    }
+                });
+            Assert.AreEqual("{\"object1\":{\"name\":\"Name\",\"value\":4}}", result);
+        }
+
+        [Test]
+        public void CorrectlySerializeNestedObject()
+        {
+            var result = _sut.Serialize(
+                new
+                {
+                    object1 = new
+                    {
+                        object2 = new
+                        {
+                            object3 = new
+                            {
+                                value = true
+                            }
+                        }
+                    }
+                });
+            Assert.AreEqual("{\"object1\":{\"object2\":{\"object3\":{\"value\":true}}}}", result);
+        }
     }
 }
