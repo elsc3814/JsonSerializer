@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Globalization;
 using System.Text;
 
@@ -17,22 +18,39 @@ namespace JsonSerializer
                 if (i != 0) sb.Append(",");
                 var value = properties[i].GetValue(o, null);
                 var name = properties[i].Name;
-                switch (properties[i].PropertyType.Name)
-                {
-                    case "String":
-                        sb.Append($"\"{name}\":\"{value}\"");
-                        break;
-                    case "Boolean":
-                        sb.Append($"\"{name}\":{(value != null && (bool) value ? "true" : "false")}");
-                        break;
-                    default:
-                        sb.Append($"\"{name}\":{Convert.ToString(value, CultureInfo.InvariantCulture)}");
-                        break;
-                }
+
+                sb.Append($"\"{name}\":");
+                AppendValue(value, properties[i].PropertyType, sb);
             }
 
             sb.Append("}");
             return sb.ToString();
+        }
+
+        private static void AppendValue(object value, Type type, StringBuilder sb)
+        {
+            if (type.IsArray)
+            {
+                sb.Append("[");
+
+                var arr = (IList) value;
+
+                for (var i = 0; i < arr.Count; i++)
+                {
+                    if (i != 0) sb.Append(",");
+                    AppendValue(arr[i], arr[i]?.GetType(), sb);
+                }
+
+                sb.Append("]");
+                return;
+            }
+
+            sb.Append(type.Name switch
+            {
+                "String" => $"\"{value}\"",
+                "Boolean" => value != null && (bool) value ? "true" : "false",
+                _ => Convert.ToString(value, CultureInfo.InvariantCulture)
+            });
         }
     }
 }
